@@ -1,0 +1,11 @@
+using System.Collections.Generic;
+using UnityEngine;
+
+[CreateAssetMenu(fileName = "CharacterData", menuName = "ScriptableObjects/CharacterData", order = 1)]
+public class CharacterData : ScriptableObject
+{
+    public string characterName;
+    public int initialAffinity;
+    public Sprite portrait;
+    public List<EventData> events;
+}
