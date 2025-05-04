@@ -8,4 +8,5 @@ public class EventData : ScriptableObject
     public DialogueSequence dialogue;    // 引用对话序列脚本或 ScriptableObject
     public int affinityChange;
     public ScheduleConstraint constraint; // 自定义触发条件类
+    public CharacterData targetCharacter;
 }
