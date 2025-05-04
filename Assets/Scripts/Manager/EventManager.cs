@@ -50,7 +50,7 @@ public class EventManager : MonoBehaviour
     {
         DialogueRunner.Instance.StartDialogue(evt.dialogue, () =>
         {
-            AffinityManager.Instance.ChangeAffinity(evt.dialogue.targetCharacter, evt.affinityChange);
+            AffinityManager.Instance.ChangeAffinity(evt.targetCharacter, evt.affinityChange);
         });
     }
 }
