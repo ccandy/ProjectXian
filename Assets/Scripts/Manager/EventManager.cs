@@ -1,3 +1,4 @@
+using System;
 using System.Collections.Generic;
 using UnityEngine;
 
@@ -5,7 +6,7 @@ public class EventManager : MonoBehaviour
 {
     public static EventManager Instance { get; private set; }
 
-    private List<EventData> allEvents;
+    private Dictionary<string, Action<object>> eventTable = new Dictionary<string, Action<object>>();
 
     private void Awake()
     {
@@ -19,38 +20,28 @@ public class EventManager : MonoBehaviour
             Destroy(gameObject);
         }
     }
-
-    /// <summary>
-    /// 初始化：加载所有 EventData
-    /// </summary>
-    public void Init()
+    
+    public void Subscribe(string eventName, Action<object> listener)
     {
-        allEvents = new List<EventData>(Resources.LoadAll<EventData>("EventData"));
+        if (!eventTable.ContainsKey(eventName))
+            eventTable[eventName] = delegate { };
+        eventTable[eventName] += listener;
+    }
+    
+    public void Unsubscribe(string eventName, Action<object> listener)
+    {
+        if (eventTable.ContainsKey(eventName))
+            eventTable[eventName] -= listener;
+    }
+    
+    public void TriggerEvent(string eventName, object param = null)
+    {
+        if (eventTable.ContainsKey(eventName))
+            eventTable[eventName]?.Invoke(param);
     }
 
-    /// <summary>
-    /// 检查并触发满足条件的第一个事件
-    /// </summary>
-    public void CheckTriggerableEvents()
-    {
-        foreach (var evt in allEvents)
-        {
-            if (evt.constraint.IsMet(TimeController.Instance.CurrentDay, TimeController.Instance.CurrentSlot,AffinityManager.Instance))
-            {
-                StartEvent(evt);
-                break;  // 每次只触发一个事件
-            }
-        }
-    }
+    
 
-    /// <summary>
-    /// 执行剧情：播放对话，结束时调整好感度
-    /// </summary>
-    private void StartEvent(EventData evt)
-    {
-        DialogueRunner.Instance.StartDialogue(evt.dialogue, () =>
-        {
-            AffinityManager.Instance.ChangeAffinity(evt.targetCharacter, evt.affinityChange);
-        });
-    }
+
+    
 }
