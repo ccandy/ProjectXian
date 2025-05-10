@@ -5,7 +5,7 @@ using UnityEngine;
 /// <summary>
 /// 通用单例基类，其他 MonoBehaviour 类可继承以获取单例功能。
 /// </summary>
-public class SingletonMonoBehaviour<T> : MonoBehaviour where T : MonoBehaviour
+public abstract class SingletonMonoBehaviour<T> : MonoBehaviour where T : MonoBehaviour
 {
     
     private static T _instance;
